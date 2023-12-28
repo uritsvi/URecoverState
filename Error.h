@@ -1,0 +1,19 @@
+#pragma once
+
+#include <iostream>
+#include <Windows.h>
+
+#ifdef _DEBUG
+
+#define ERROR_LOG(Msg) std::cout << "\033[0;31m" << __FILE__ << ":" << __LINE__ << "\n" << Msg << "\n" << "\033[0m"
+#define WARNING_LOG(Msg) std::cout << "\033[0;33m" << __FILE__ << ":" << __LINE__ << "\n" << Msg << "\n" << "\033[0m"
+
+#else
+
+#define ERROR_LOG(Msg)
+#define WARNING_LOG(Msg)
+
+
+#endif
+
+#define EXIT_WITH_ERROR(Msg) ERROR_LOG(Msg); exit(-1);

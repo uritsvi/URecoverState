@@ -1,0 +1,2 @@
+cd /d "C:\Users\97254\source\repos\RecoverState" &msbuild "RecoverState.vcxproj" /t:sdvViewer /p:configuration="Debug" /p:platform="x64" /p:SolutionDir="C:\Users\97254\source\repos\RecoverState" 
+exit %errorlevel% 
