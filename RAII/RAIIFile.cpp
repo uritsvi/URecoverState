@@ -131,7 +131,7 @@ bool RAIIFile::IsMapped() {
 }
 */
 
-DWORD RAIIFile::GetRAIIFileSize() {
+DWORD RAIIFile::GetSize() {
 	DWORD size;
 	GetFileSize(m_Handle, &size);
 

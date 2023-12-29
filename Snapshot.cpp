@@ -5,17 +5,19 @@
 
 int Snapshot::m_SnapshotCount;
 
+/*
 std::string Snapshot::MakeSnapshotFilePath() {
 	return std::string("Snapshot") + std::to_string(m_Index);
 }
+*/
 
 Snapshot::Snapshot() {
 	m_Index = m_SnapshotCount++;
-	m_TargetFilePath = MakeSnapshotFilePath();
+	//m_TargetFilePath = MakeSnapshotFilePath();
 }
 Snapshot::Snapshot(std::string Path) {
 	m_SnapshotCount++;
-	m_TargetFilePath = Path;
+	//m_TargetFilePath = Path;
 }
 
 Snapshot::~Snapshot() {
@@ -28,10 +30,14 @@ bool Snapshot::InternalTakeSnapshot(bool ExitAccessProcessState) {
 		if (!res) {
 			ERROR_LOG("Failed to get file name");
 		}
+
+		/*
 		res = m_TargetFile.Create(m_TargetFilePath, true);
 		if (!res) {
 
 		}
+		
+		
 		res = ProcessState::GetInstance().DumpState(
 			m_TargetFile, 
 			ExitAccessProcessState
@@ -40,36 +46,46 @@ bool Snapshot::InternalTakeSnapshot(bool ExitAccessProcessState) {
 			ERROR_LOG("Failed to write to target file");
 			break;
 		}
+		*/
+		
+		/*
+		* TODO: Move this
+		*/
+		m_ProcessStateDir = 
+			std::make_shared<RAIIDirectory>();
+		
+		res = m_ProcessStateDir->Create(
+			std::to_string(m_Index), 
+			true
+		);
+		if (!res) {
+			ERROR_LOG("Failed to create dir");
+			break;
+		}
+
+		res = m_ProcessState.Init(m_ProcessStateDir);
+		if (!res) {
+			ERROR_LOG("Failed to init process state");
+			break;
+		}
+
+		res = m_ProcessState.DumpState(
+			ExitAccessProcessState
+		);
+		if (!res) {
+			ERROR_LOG("Failed to dump process state");
+			break;
+		}
+
 	} while (false);
 
 	return res;
 }
 
-std::string MemToString(MEMORY_BASIC_INFORMATION& Info) {
-	std::string out = "";
-	out += "AllocationBase: " + std::to_string((UINT64)Info.BaseAddress) + "\n";
-	out += "AllocationBase: " + std::to_string((UINT64)Info.AllocationBase) + "\n";
-	out += "AllocationProtect: " + std::to_string(Info.AllocationProtect) + "\n";
-	out += "RegionSize: " + std::to_string(Info.RegionSize) + "\n";
-	out += "State: " + std::to_string(Info.State) + "\n";
-	out += "Protect: " + std::to_string(Info.Protect) + "\n";
-	out += "Type: " + std::to_string(Info.Type) + "\n";
-
-	return out;
-}
-
-
 bool Snapshot::Take() {
 	
-
-	TargetProcess::GetInstance().Suspend();
 	
-
-
 	bool res =  InternalTakeSnapshot(true);
-
-	TargetProcess::GetInstance().Resume();
-
 
 	return res;
 }
@@ -81,15 +97,12 @@ bool Snapshot::Revert(_Out_ std::shared_ptr<Snapshot>& CurrentState) {
 	do {
 		CurrentState = std::make_shared<Snapshot>();
 		
-		std::string str;
 
-		LPCVOID addr = 0;
-		MEMORY_BASIC_INFORMATION info;
-
-
+		/*
 		if (!m_TargetFile.IsOpen()) {
 			m_TargetFile.Open(m_TargetFilePath);
 		}
+		*/
 
 
 		res = CurrentState->InternalTakeSnapshot(false);
@@ -97,7 +110,16 @@ bool Snapshot::Revert(_Out_ std::shared_ptr<Snapshot>& CurrentState) {
 			ERROR_LOG("Failed to take snapshot");
 			break;
 		}
+		res = m_ProcessState.RevertState(
+			CurrentState->m_ProcessState,
+			false
+		);
+		if (!res) {
+			ERROR_LOG("Failed to revert state");
+			break;
+		}
 
+		/*
 		if (!m_TargetFile.IsOpen()) {
 			m_TargetFile.Open(m_TargetFilePath);
 		}
@@ -111,10 +133,11 @@ bool Snapshot::Revert(_Out_ std::shared_ptr<Snapshot>& CurrentState) {
 			ERROR_LOG("Failed to revert process state");
 			break;
 		}
+		*/
 
 	} while (false);
 
-	TargetProcess::GetInstance().Resume();
+	//TargetProcess::GetInstance().Resume();
 
 
 	return res;

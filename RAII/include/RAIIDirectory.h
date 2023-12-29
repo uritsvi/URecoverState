@@ -5,8 +5,13 @@ class RAIIDirectory
 {
 public:
 	RAIIDirectory();
+
 	~RAIIDirectory();
 
+	bool Create(
+		_In_ std::string Path, 
+		_In_ bool DeleteOnClose
+	);
 	bool Open(_In_ std::string Path);
 	
 	bool FilesWithExtension(
@@ -15,5 +20,6 @@ public:
 	);
 
 private:
-	std::list<std::string> m_AllFiles;
+	std::string m_Path;
+	bool m_DeleteOnClose;
 };

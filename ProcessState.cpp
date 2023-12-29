@@ -23,21 +23,13 @@
 
 #define NON_PRIVATE_NEM_NOT_SUPPORTED "Not supported dealocating non private mem"
 
-#define MINI_DUMP_FLAGS (MINIDUMP_TYPE)\
-						(MiniDumpWithFullMemory|\
-						MiniDumpWithHandleData|\
-						MiniDumpWithModuleHeaders|\
-						MiniDumpWithUnloadedModules|\
-					    MiniDumpWithProcessThreadData|\
-						MiniDumpWithFullMemoryInfo|\
-						MiniDumpWithThreadInfo)
 
-
-
+/*
 ProcessState& ProcessState::GetInstance() {
 	static ProcessState state = ProcessState();
 	return state;
 }
+*/
 
 std::string MemToString(PMINIDUMP_MEMORY_INFO& Info) {
 	std::string out = "";
@@ -52,6 +44,7 @@ std::string MemToString(PMINIDUMP_MEMORY_INFO& Info) {
 	return out;
 }
 
+/*
 bool ProcessState::Init() {
 
 	StateFiles dummy;
@@ -70,7 +63,9 @@ bool ProcessState::Init() {
 
 	return true;
 }
+*/
 
+/*
 bool ProcessState::DumpState(
 	_In_ StateFiles& File,
 	_In_ bool _ExitAccessProcessState) {
@@ -117,6 +112,83 @@ bool ProcessState::DumpState(
 
 	return res;
 }
+*/
+
+bool ProcessState::Init(_In_ std::shared_ptr<RAIIDirectory> TargetDir) {
+	m_TargetDir = TargetDir;
+}
+
+bool ProcessState::DumpState(_In_ bool _ExitAccessProcessState) {
+	bool res = true;
+
+	do {
+		res = EnterAccessProcessState();
+		if (!res) {
+			ERROR_LOG("Failed to enter access process state");
+			break;
+		}
+
+		res = m_DmpFile.Dump();
+		if (!res) {
+			ERROR_LOG("Failed to dump state");
+			break;
+		}
+
+		if (!_ExitAccessProcessState) {
+			break;
+		}
+
+		res = ExitAccessProcessState();
+		if (!res) {
+			ERROR_LOG("Failed to exit access process state");
+			break;
+		}
+
+	} while (false);
+
+	return res;
+}
+
+bool ProcessState::RevertState(
+	_In_ ProcessState& CurrentState,
+	_In_ bool _EnterAccessProcessState) {
+
+	bool res = true;
+
+	do {
+		if (_EnterAccessProcessState) {
+			res = EnterAccessProcessState();
+			if (!res) {
+				ERROR_LOG("Failed to enter access process state");
+				break;
+			}
+		}
+
+		StateInfo currentState;
+		StateInfo targetState;
+
+		res = CurrentState.m_DmpFile.Read(currentState);
+		if (!res) {
+			ERROR_LOG("Failed to read current state");
+			break;
+		}
+		res = m_DmpFile.Read(targetState);
+		if (!res) {
+			ERROR_LOG("Failed to read state");
+			break;
+		}
+
+		res = ExitAccessProcessState();
+		if (!res) {
+			ERROR_LOG("Failed to exit access process state");
+			break;
+		}
+	} while (false);
+
+	return res;
+}
+
+/*
 bool ProcessState::RevertState(
 	_In_ StateFiles& File,
 	_In_ StateFiles& CurrentState,
@@ -198,7 +270,8 @@ bool ProcessState::RevertState(
 
 	return res;
 }
-
+*/
+/*
 bool ProcessState::ReadDumpFileState(
 	_In_ LPVOID Addr,
 	_Out_ StateInfo& Info) {
@@ -271,6 +344,7 @@ bool ProcessState::ReadDumpFileState(
 
 	return res;
 }
+*/
 
 bool ProcessState::RevertToStateFromInfo(
 	_In_ StateInfo& Info,
@@ -660,13 +734,13 @@ bool ProcessState::EnterAccessProcessState() {
 
 	do {
 
-		/*
+		
 		res = TargetProcess::GetInstance().Suspend();
 		if (!res) {
 			ERROR_LOG("Failed to suspend target process");
 			break;
 		}
-		*/
+		
 
 		/*
 		if (!m_URSDll.IsLoaded()) {
@@ -707,7 +781,7 @@ void ProcessState::MakeMemInfoDict(
 bool ProcessState::ExitAccessProcessState() {
 	bool res = true;
 
-	/*
+	
 	do {
 		res = TargetProcess::GetInstance().Resume();
 		if (!res) {
@@ -715,7 +789,7 @@ bool ProcessState::ExitAccessProcessState() {
 			break;
 		}
 	} while (false);
-	*/
+	
 	return res;
 }
 

@@ -5,26 +5,53 @@
 
 RAIIDirectory::RAIIDirectory() {
 }
-RAIIDirectory::~RAIIDirectory() {
+bool RAIIDirectory::Create(
+	_In_ std::string Path,
+	_In_ bool DeleteOnClose) {
+
+	m_Path = Path;
+	m_DeleteOnClose = DeleteOnClose;
+
+	return CreateDirectoryA(
+		Path.c_str(),
+		nullptr
+	);
 
 }
-
 bool RAIIDirectory::Open(_In_ std::string Path) {
-	bool res = true;
+
+	m_Path = Path;
+	m_DeleteOnClose = false;
+
+	return true;
+}
+
+
+RAIIDirectory::~RAIIDirectory() {
+	if (m_DeleteOnClose) {
+		RemoveDirectoryA(m_Path.c_str());
+	}
+}
+
+bool RAIIDirectory::FilesWithExtension(
+	_In_ std::string Ext,
+	_Out_ std::list<std::string>& Files) {
 	
-	auto originalPath = Path;
-	Path += "\\*";
+	bool res = true;
+
+	std::list<std::string> allFiles;
 
 	do {
+		auto path = m_Path + "\\*";
 		WIN32_FIND_DATAA data;
-		auto currentFile = FindFirstFileA(Path.c_str(), &data);
+		auto currentFile = FindFirstFileA(path.c_str(), &data);
 		if (currentFile == INVALID_HANDLE_VALUE) {
 			break;
 		}
 
 		do {
 			if (!(data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-				m_AllFiles.push_back(originalPath + "\\" + data.cFileName);
+				allFiles.push_back(m_Path + "\\" + data.cFileName);
 			}
 		} while (FindNextFileA(currentFile, &data));
 
@@ -36,15 +63,7 @@ bool RAIIDirectory::Open(_In_ std::string Path) {
 
 	} while (false);
 
-
-	return res;
-}
-
-bool RAIIDirectory::FilesWithExtension(
-	_In_ std::string Ext,
-	_Out_ std::list<std::string>& Files) {
-
-	for (auto file : m_AllFiles) {
+	for (auto file : allFiles) {
 		auto lastIndex = file.find_last_of('.');
 		auto filePath = file.substr(lastIndex);
 
@@ -53,5 +72,5 @@ bool RAIIDirectory::FilesWithExtension(
 		}
 	}
 
-	return true;
+	return res;
 }

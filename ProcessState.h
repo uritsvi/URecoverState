@@ -9,25 +9,14 @@
 #include <unordered_map>
 
 #include "URSDLL.h"
+#include "RAII/include/RAIIDirectory.h"
 #include "MemAllocInfo.h"
+#include "DmpFile.h"
 
 
 
-struct StateInfo {
-	std::string FilePath;
 
-	LPVOID DumpFileBaseAddr;
-
-	PMINIDUMP_THREAD_LIST ThreadInfo;
-	
-	PMINIDUMP_MEMORY_INFO_LIST MemInfo;
-	PMINIDUMP_MEMORY64_LIST Mem;
-
-	PMINIDUMP_HANDLE_DATA_STREAM HandlesInfo;
-
-	PMINIDUMP_MODULE_LIST ModulesInfo;
-};
-
+/*
 struct StateFiles {
 	RAIIFile DmpFile;
 //	RAIIFile AllocCSV;
@@ -62,13 +51,14 @@ struct StateFiles {
 private:
 	bool m_isOpen = false;
 };
+*/
 
 class ProcessState
 {
 public:
-	static ProcessState& GetInstance();
+	//static ProcessState& GetInstance();
 
-	bool Init();
+	bool Init(_In_ std::shared_ptr<RAIIDirectory> TargetDir);
 
 	/*
 	* When we want to revert to a snapshot we dont want the process to resume 
@@ -80,14 +70,21 @@ public:
 	* Both functions recives open file handles
 	*/
 	bool DumpState(
-		_In_ StateFiles& File,
 		_In_ bool _ExitAccessProcessState
 	);
+	bool RevertState(
+		_In_ ProcessState& CurrentState,
+		_In_ bool _EnterAccessProcessState
+	);
+
+	/*
 	bool RevertState(
 		_In_ StateFiles& File,
 		_In_ StateFiles& CurrentState,
 		_In_ bool _EnterAccessProcessState
 	);
+	*/
+
 
 private:
 	bool ReadDumpFileState(
@@ -138,7 +135,9 @@ private:
 	);
 
 private:
-	URSDLL m_URSDll;
-	bool m_FinishInit;
+	//URSDLL m_URSDll;
+	std::shared_ptr<RAIIDirectory> m_TargetDir;
+	
+	DmpFile m_DmpFile;
 };
 

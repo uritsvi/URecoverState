@@ -17,7 +17,7 @@ public:
 
 	//bool IsMapped();
 
-	DWORD GetRAIIFileSize();
+	DWORD GetSize();
 
 	bool IsOpen();
 

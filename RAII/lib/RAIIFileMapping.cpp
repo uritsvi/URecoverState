@@ -1,51 +1,58 @@
 #include "../include/RAIIFileMapping.h"
 
-RAIIFileMapping::RAIIFileMapping(
-	_In_ std::shared_ptr<RAIIFile> File,
-	_In_ ULONG Size) {
 
-	Map(File->GetHandle(), Size);
-}
-RAIIFileMapping::RAIIFileMapping(
+
+bool RAIIFileMapping::Create(
 	_In_ RAIIFile& File,
 	_In_ ULONG Size) {
 
-	Map(File.GetHandle(), Size);
-
+	return Map(
+		File.GetHandle(), 
+		Size
+	);
 }
+
 
 RAIIFileMapping::~RAIIFileMapping() {
 }
 
-void RAIIFileMapping::Map(
+bool RAIIFileMapping::Map(
 	_In_ HANDLE File,
 	_In_ ULONG Size) 
 {
 
-	m_MappedAddr = nullptr;
+	bool res = true;
 
-	m_FileMapping = CreateFileMappingA(
-		File,
-		nullptr,
-		PAGE_EXECUTE_READWRITE,
-		0,
-		0,
-		nullptr
-	);
-	if (m_FileMapping == INVALID_HANDLE_VALUE) {
-		return;
-	}
+	do {
+		m_MappedAddr = nullptr;
 
-	m_MappedAddr = MapViewOfFile(
-		m_FileMapping,
-		FILE_ALL_ACCESS,
-		0,
-		0,
-		Size
-	);
-	if (m_MappedAddr == nullptr) {
-		return;
-	}
+		m_FileMapping = CreateFileMappingA(
+			File,
+			nullptr,
+			PAGE_EXECUTE_READWRITE,
+			0,
+			0,
+			nullptr
+		);
+		if (m_FileMapping == INVALID_HANDLE_VALUE) {
+			res = false;
+			break;
+		}
+
+		m_MappedAddr = MapViewOfFile(
+			m_FileMapping,
+			FILE_ALL_ACCESS,
+			0,
+			0,
+			Size
+		);
+		if (m_MappedAddr == nullptr) {
+			res = false;
+			break;
+		}
+	} while (false);
+
+	return res;
 }
 
 LPVOID RAIIFileMapping::GetMappedAddr() {

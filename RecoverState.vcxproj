@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CSVBuffer.cpp" />
+    <ClCompile Include="DmpFile.cpp" />
     <ClCompile Include="MemAllocInfo.cpp" />
     <ClCompile Include="NTDLL.cpp" />
     <ClCompile Include="ProcessState.cpp" />
@@ -156,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CSVBuffer.h" />
+    <ClInclude Include="DmpFile.h" />
     <ClInclude Include="include\URSInterface.h" />
     <ClInclude Include="MemAllocInfo.h" />
     <ClInclude Include="NTDLL.h" />

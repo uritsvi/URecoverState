@@ -8,22 +8,20 @@ class RAIIFileMapping {
 
 public:
 	RAIIFileMapping() = default;
-	RAIIFileMapping(
-		_In_ std::shared_ptr<RAIIFile> File,
-		_In_ ULONG Size
-	);
-	RAIIFileMapping(
+	~RAIIFileMapping();
+
+	bool Create(
 		_In_ RAIIFile& File,
 		_In_ ULONG Size
 	);
 
-	void Map(_In_ HANDLE File,
+	LPVOID GetMappedAddr();
+
+
+private:
+	bool Map(_In_ HANDLE File,
 			 _In_ ULONG Size
 	);
-
-	~RAIIFileMapping();
-
-	LPVOID GetMappedAddr();
 
 private:
 	LPVOID m_MappedAddr;

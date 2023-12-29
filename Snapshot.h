@@ -21,15 +21,16 @@ public:
 	bool Revert(_Out_ std::shared_ptr<Snapshot>& CurrentState);
 
 private:
-	std::string MakeSnapshotFilePath();
+	//std::string MakeSnapshotFilePath();
 
 	bool InternalTakeSnapshot(bool ExitAccessProcessState);
 
 private:
-	std::string m_TargetFilePath;
-	StateFiles m_TargetFile;
+	std::shared_ptr<RAIIDirectory> m_ProcessStateDir;
+	ProcessState m_ProcessState;
+	//std::string m_TargetFilePath;
+	//StateFiles m_TargetFile;
 	int m_Index;
-
 	static int m_SnapshotCount;
 
 };
