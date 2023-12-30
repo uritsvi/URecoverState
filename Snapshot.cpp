@@ -90,7 +90,6 @@ bool Snapshot::Take() {
 	return res;
 }
 bool Snapshot::Revert(_Out_ std::shared_ptr<Snapshot>& CurrentState) {
-	TargetProcess::GetInstance().Suspend();
 
 	bool res = true;
 

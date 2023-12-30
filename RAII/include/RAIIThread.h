@@ -15,9 +15,11 @@ public:
 		_Out_ DWORD& Tid
 	);
 	
-	bool SetContext(_In_ CONTEXT& Context);
+	bool SetContext(_In_ PCONTEXT Context);
 
 	bool Resume();
+
+	bool Terminate();
 
 private:
 	HANDLE m_Handle;

@@ -52,13 +52,13 @@ bool RAIIThread::Create(
 }
 
 
-bool RAIIThread::SetContext(_In_ CONTEXT& Context) {
+bool RAIIThread::SetContext(_In_ PCONTEXT Context) {
 	bool res = true;
 	
 	do {
 		res = SetThreadContext(
 			m_Handle,
-			&Context
+			Context
 		);
 		if (!res) {
 			break;
@@ -74,4 +74,8 @@ bool RAIIThread::Resume() {
 	}
 
 	return ResumeThread(m_Handle);
+}
+
+bool RAIIThread::Terminate() {
+	return TerminateThread(m_Handle, 0);
 }

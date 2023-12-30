@@ -18,11 +18,17 @@
 						MiniDumpWithThreadInfo)
 
 
-bool DmpFile::Dump() {
+bool DmpFile::Dump(_In_ std::shared_ptr<RAIIDirectory> TargetDirectory) {
 	bool res = true;
 
 	do {
-		res = m_File.Create(DMP_FILE_NAME);
+		std::string path;
+		TargetDirectory->MakePath(
+			DMP_FILE_NAME, 
+			path
+		);
+
+		res = m_File.Create(path, true);
 		if (!res) {
 			ERROR_LOG("Failed to create dmp file");
 			break;
@@ -68,7 +74,6 @@ bool DmpFile::Read(_In_ StateInfo& Info) {
 		}
 		auto addr = mapping.GetMappedAddr();
 
-		do {
 			PMINIDUMP_DIRECTORY dir;
 			ULONG size;
 
@@ -131,6 +136,5 @@ bool DmpFile::Read(_In_ StateInfo& Info) {
 
 		} while (false);
 
-		return res;
-	}
+	return res;
 }

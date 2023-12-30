@@ -1,5 +1,8 @@
+#pragma once
+
 #include <string>
 #include <list>
+
 
 class RAIIDirectory
 {
@@ -17,6 +20,11 @@ public:
 	bool FilesWithExtension(
 		_In_ std::string Ext, 
 		_Out_ std::list<std::string>& Files
+	);
+
+	void MakePath(
+		_In_ std::string FilePath,
+		_Out_ std::string& DirFilePath
 	);
 
 private:

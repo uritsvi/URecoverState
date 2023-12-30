@@ -26,8 +26,9 @@ private:
 	bool InternalTakeSnapshot(bool ExitAccessProcessState);
 
 private:
-	std::shared_ptr<RAIIDirectory> m_ProcessStateDir;
 	ProcessState m_ProcessState;
+
+	std::shared_ptr<RAIIDirectory> m_ProcessStateDir;
 	//std::string m_TargetFilePath;
 	//StateFiles m_TargetFile;
 	int m_Index;

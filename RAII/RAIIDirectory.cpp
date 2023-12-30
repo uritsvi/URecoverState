@@ -29,7 +29,7 @@ bool RAIIDirectory::Open(_In_ std::string Path) {
 
 RAIIDirectory::~RAIIDirectory() {
 	if (m_DeleteOnClose) {
-		RemoveDirectoryA(m_Path.c_str());
+		bool res = RemoveDirectoryA(m_Path.c_str());
 	}
 }
 
@@ -73,4 +73,11 @@ bool RAIIDirectory::FilesWithExtension(
 	}
 
 	return res;
+}
+
+void RAIIDirectory::MakePath(
+	_In_ std::string FilePath,
+	_Out_ std::string& DirFilePath) {
+
+	DirFilePath = m_Path + "\\" + FilePath;
 }

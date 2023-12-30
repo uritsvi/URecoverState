@@ -29,11 +29,6 @@ bool URS::Init(_In_ DWORD PID) {
 			ERROR_LOG("Failed to load snapshots");
 			break;
 		}
-		res = ProcessState::GetInstance().Init();
-		if (!res) {
-			ERROR_LOG("Failed to init process state");
-			break;
-		}
 	} while (false);
 
 	return res;

@@ -12,9 +12,7 @@
 #include "RAII/include/RAIIDirectory.h"
 #include "MemAllocInfo.h"
 #include "DmpFile.h"
-
-
-
+#include "ThreadsState.h"
 
 /*
 struct StateFiles {
@@ -87,11 +85,27 @@ public:
 
 
 private:
+
+	bool ActualRevertState(
+		_In_ StateInfo& CurrentState,
+		_In_ StateInfo& TargetState
+	);
+
+	bool RecoverThreadsState(
+		_In_ StateInfo& CurrentState,
+		_In_ StateInfo& TargetState);
+
+	bool EnterAccessProcessState();
+	bool ExitAccessProcessState();
+
+	/*
 	bool ReadDumpFileState(
 		_In_ LPVOID Addr,
 		_Out_ StateInfo& Info
 	);
+	*/
 
+	/*
 	bool RevertToStateFromInfo(
 		_In_ StateInfo& Info,
 		_In_ StateInfo& CurrentStateInfo
@@ -105,6 +119,8 @@ private:
 		_In_ StateInfo& TargetState,
 		_In_ StateInfo& CurrentState
 	);
+
+
 
 	bool EnterAccessProcessState();
 	bool ExitAccessProcessState();
@@ -133,11 +149,16 @@ private:
 		_In_ UINT64 AllocBase, 
 		_In_ UINT64 Base
 	);
+	*/
 
 private:
-	//URSDLL m_URSDll;
+
+
+	// Deletes the dir affter deleted all files in dir
 	std::shared_ptr<RAIIDirectory> m_TargetDir;
 	
-	DmpFile m_DmpFile;
+	// Calles this destructor first 
+	DmpFile m_DmpFile; 
+	
 };
 

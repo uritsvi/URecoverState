@@ -3,6 +3,8 @@
 #include <Windows.h>
 #include <string>
 
+#include "RAIIDirectory.h"
+
 class RAIIFile
 {
 public:

@@ -116,6 +116,7 @@ bool ProcessState::DumpState(
 
 bool ProcessState::Init(_In_ std::shared_ptr<RAIIDirectory> TargetDir) {
 	m_TargetDir = TargetDir;
+	return true;
 }
 
 bool ProcessState::DumpState(_In_ bool _ExitAccessProcessState) {
@@ -128,22 +129,20 @@ bool ProcessState::DumpState(_In_ bool _ExitAccessProcessState) {
 			break;
 		}
 
-		res = m_DmpFile.Dump();
+		res = m_DmpFile.Dump(m_TargetDir);
 		if (!res) {
 			ERROR_LOG("Failed to dump state");
 			break;
 		}
 
-		if (!_ExitAccessProcessState) {
-			break;
-		}
+		if (_ExitAccessProcessState) {
 
-		res = ExitAccessProcessState();
-		if (!res) {
-			ERROR_LOG("Failed to exit access process state");
-			break;
+			res = ExitAccessProcessState();
+			if (!res) {
+				ERROR_LOG("Failed to exit access process state");
+				break;
+			}
 		}
-
 	} while (false);
 
 	return res;
@@ -177,12 +176,120 @@ bool ProcessState::RevertState(
 			ERROR_LOG("Failed to read state");
 			break;
 		}
+		
+		res = ActualRevertState(
+			currentState, 
+			targetState
+		);
+		if (!res) {
+			ERROR_LOG("Failed to recover state");
+			break;
+		}
 
 		res = ExitAccessProcessState();
 		if (!res) {
 			ERROR_LOG("Failed to exit access process state");
 			break;
 		}
+	} while (false);
+
+	return res;
+}
+
+bool ProcessState::ActualRevertState(
+	_In_ StateInfo& CurrentState,
+	_In_ StateInfo& TargetState) {
+
+	bool res = true;
+
+	do {
+		res = RecoverThreadsState(
+			CurrentState, 
+			TargetState
+		);
+		if (!res) {
+			ERROR_LOG("Failed to recover threads state");
+			break;
+		}
+	} while (false);
+
+	return res;
+}
+
+bool ProcessState::RecoverThreadsState(
+	_In_ StateInfo& CurrentState,
+	_In_ StateInfo& TargetState) {
+	
+	bool res = true;
+
+	do {
+		ThreadsState currentThreadsState;
+		ThreadsState targetThreadsState;
+
+		res = currentThreadsState.Init(CurrentState);
+		if (!res) {
+			ERROR_LOG("Failed to init current threads state");
+			break;
+		}
+		res = targetThreadsState.Init(TargetState);
+		if (!res) {
+			ERROR_LOG("Failed to init target threads state");
+			break;
+		}
+
+		res = targetThreadsState.Revert(currentThreadsState);
+		if (!res) {
+			ERROR_LOG("Failed to revert threads state");
+			break;
+		}
+
+	} while (false);
+
+	return res;
+}
+
+
+bool ProcessState::ExitAccessProcessState() {
+	bool res = true;
+
+
+	do {
+		res = TargetProcess::GetInstance().Resume();
+		if (!res) {
+			ERROR_LOG("Failed to resume target process");
+			break;
+		}
+	} while (false);
+
+	return res;
+}
+
+bool ProcessState::EnterAccessProcessState() {
+	bool res = true;
+
+	do {
+
+
+		res = TargetProcess::GetInstance().Suspend();
+		if (!res) {
+			ERROR_LOG("Failed to suspend target process");
+			break;
+		}
+
+		/*
+		if (!m_URSDll.IsLoaded()) {
+
+			res = m_URSDll.Load();
+			if (!res) {
+				ERROR_LOG("Failed to load dll");
+				break;
+			}
+		}
+		else {
+			m_URSDll.ResumeDllThread();
+		}
+		*/
+
 	} while (false);
 
 	return res;
@@ -346,6 +453,7 @@ bool ProcessState::ReadDumpFileState(
 }
 */
 
+/*
 bool ProcessState::RevertToStateFromInfo(
 	_In_ StateInfo& Info,
 	_In_ StateInfo& CurrentStateInfo) {
@@ -515,7 +623,8 @@ bool ProcessState::RevertMemoryState(
 		*
 		*
 		*/
-
+	
+/*
 		res = ResolveAllocations();
 		if (!res) {
 			ERROR_LOG("Failed to resove allocations");
@@ -722,6 +831,7 @@ bool ProcessState::RevertMemoryState(
 
 		res = true;
 		*/
+/*
 	} while (false);
 	
 
@@ -729,38 +839,7 @@ bool ProcessState::RevertMemoryState(
 }
 
 
-bool ProcessState::EnterAccessProcessState() {
-	bool res = true;
 
-	do {
-
-		
-		res = TargetProcess::GetInstance().Suspend();
-		if (!res) {
-			ERROR_LOG("Failed to suspend target process");
-			break;
-		}
-		
-
-		/*
-		if (!m_URSDll.IsLoaded()) {
-
-			res = m_URSDll.Load();
-			if (!res) {
-				ERROR_LOG("Failed to load dll");
-				break;
-			}
-		}
-		else {
-			m_URSDll.ResumeDllThread();
-		}
-		*/
-
-
-	} while (false);
-
-	return res;
-}
 
 void ProcessState::MakeMemInfoDict(
 	_In_ StateInfo& State,
@@ -778,20 +857,7 @@ void ProcessState::MakeMemInfoDict(
 	}
 }
 
-bool ProcessState::ExitAccessProcessState() {
-	bool res = true;
 
-	
-	do {
-		res = TargetProcess::GetInstance().Resume();
-		if (!res) {
-			ERROR_LOG("Failed to resume target process");
-			break;
-		}
-	} while (false);
-	
-	return res;
-}
 
 bool ProcessState::FindStartAddrOfMemBlock(
 	_In_ StateInfo& TargetState,
@@ -856,3 +922,4 @@ UINT64 ProcessState::CalcRegionSize(
 	//return (Base - AllocBase) + RegionSize;
 	return RegionSize;
 }
+*/

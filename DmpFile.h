@@ -1,7 +1,12 @@
 #pragma once
 
+
 #include "RAII/include/RAIIFile.h"
 #include "RAII/include/RAIIFileMapping.h"
+#include "RAII/include/RAIIDirectory.h"
+
+#include <DbgHelp.h>
+
 
 struct StateInfo {
 	RAIIFileMapping Mapping;
@@ -16,13 +21,8 @@ struct StateInfo {
 class DmpFile
 {
 public:
-	bool Dump();
+	bool Dump(_In_ std::shared_ptr<RAIIDirectory> TargetDirectory);
 	bool Read(_In_ StateInfo& Info);
-
-	bool ReadMiniDumpStream(
-		_In_ MINIDUMP_STREAM_TYPE, 
-		_Out_ LPVOID Addr
-	);
 
 private:
 	RAIIFile m_File;

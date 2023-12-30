@@ -151,6 +151,7 @@
     <ClCompile Include="ProcessState.cpp" />
     <ClCompile Include="Snapshot.cpp" />
     <ClCompile Include="TargetProcess.cpp" />
+    <ClCompile Include="ThreadsState.cpp" />
     <ClCompile Include="URS.cpp" />
     <ClCompile Include="URSDLL.cpp" />
     <ClCompile Include="URSInterface.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="ProcessState.h" />
     <ClInclude Include="Snapshot.h" />
     <ClInclude Include="TargetProcess.h" />
+    <ClInclude Include="ThreadsState.h" />
     <ClInclude Include="URS.h" />
     <ClInclude Include="URSDLL.h" />
   </ItemGroup>
