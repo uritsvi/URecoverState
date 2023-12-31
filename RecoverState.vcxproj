@@ -73,19 +73,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>.\bin</OutDir>
-    <LibraryPath>C:\Users\97254\source\repos\RecoverState\lib;$(ProjectDir)\RAII\lib;$(ProjectDir)\Common\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)\RAII\lib;$(ProjectDir)\Common\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>.\bin</OutDir>
-    <LibraryPath>C:\Users\97254\source\repos\RecoverState\lib;$(ProjectDir)\RAII\lib;$(ProjectDir)\Common\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)\RAII\lib;$(ProjectDir)\Common\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>.\bin</OutDir>
-    <LibraryPath>C:\Users\97254\source\repos\RecoverState\lib;$(ProjectDir)\RAII\lib;$(ProjectDir)\Common\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)\RAII\lib;$(ProjectDir)\Common\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>.\bin</OutDir>
-    <LibraryPath>C:\Users\97254\source\repos\RecoverState\lib;$(ProjectDir)\RAII\lib;$(ProjectDir)\Common\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)\RAII\lib;$(ProjectDir)\Common\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -144,9 +144,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AllocationsState.cpp" />
     <ClCompile Include="CSVBuffer.cpp" />
     <ClCompile Include="DmpFile.cpp" />
     <ClCompile Include="MemAllocInfo.cpp" />
+    <ClCompile Include="MemoryState.cpp" />
     <ClCompile Include="NTDLL.cpp" />
     <ClCompile Include="ProcessState.cpp" />
     <ClCompile Include="Snapshot.cpp" />
@@ -157,10 +159,12 @@
     <ClCompile Include="URSInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AllocationsState.h" />
     <ClInclude Include="CSVBuffer.h" />
     <ClInclude Include="DmpFile.h" />
     <ClInclude Include="include\URSInterface.h" />
     <ClInclude Include="MemAllocInfo.h" />
+    <ClInclude Include="MemoryState.h" />
     <ClInclude Include="NTDLL.h" />
     <ClInclude Include="ProcessState.h" />
     <ClInclude Include="Snapshot.h" />

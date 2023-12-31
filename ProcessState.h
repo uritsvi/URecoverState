@@ -13,6 +13,7 @@
 #include "MemAllocInfo.h"
 #include "DmpFile.h"
 #include "ThreadsState.h"
+#include "MemoryState.h"
 
 /*
 struct StateFiles {
@@ -92,6 +93,9 @@ private:
 	);
 
 	bool RecoverThreadsState(
+		_In_ StateInfo& CurrentState,
+		_In_ StateInfo& TargetState);
+	bool RecoverMemoryState(
 		_In_ StateInfo& CurrentState,
 		_In_ StateInfo& TargetState);
 

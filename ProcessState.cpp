@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <minidumpapiset.h>
 
+
 #pragma comment(lib, "Dbghelp.lib")
 
 /*
@@ -30,19 +31,6 @@ ProcessState& ProcessState::GetInstance() {
 	return state;
 }
 */
-
-std::string MemToString(PMINIDUMP_MEMORY_INFO& Info) {
-	std::string out = "";
-	out += "AllocationBase: " + std::to_string(Info->BaseAddress) + "\n";
-	out += "AllocationBase: " + std::to_string(Info->AllocationBase) + "\n";
-	out += "AllocationProtect: " + std::to_string(Info->AllocationProtect) + "\n";
-	out += "RegionSize: " + std::to_string(Info->RegionSize) + "\n";
-	out += "State: " + std::to_string(Info->State) + "\n";
-	out += "Protect: " + std::to_string(Info->Protect) + "\n";
-	out += "Type: " + std::to_string(Info->Type) + "\n";
-
-	return out;
-}
 
 /*
 bool ProcessState::Init() {
@@ -209,6 +197,38 @@ bool ProcessState::ActualRevertState(
 		);
 		if (!res) {
 			ERROR_LOG("Failed to recover threads state");
+			break;
+		}
+	} while (false);
+
+	return res;
+}
+
+bool ProcessState::RecoverMemoryState(
+	_In_ StateInfo& CurrentState,
+	_In_ StateInfo& TargetState) {
+
+	bool res = true;
+
+	do {
+		MemoryState currentMemState;
+		MemoryState targetMemState;
+
+		res = currentMemState.Init(CurrentState);
+		if (!res) {
+			ERROR_LOG("Failed to init current mem state");
+			break;
+		}
+
+		res = targetMemState.Init(TargetState);
+		if (!res) {
+			ERROR_LOG("Failed to init target mem state");
+			break;
+		}
+
+		res = targetMemState.Revert(currentMemState);
+		if (!res) {
+			ERROR_LOG("Failed to revert memory state");
 			break;
 		}
 	} while (false);

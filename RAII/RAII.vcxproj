@@ -143,12 +143,14 @@
     <ClCompile Include="lib\RAIIFileMapping.cpp" />
     <ClCompile Include="RAIIBuffer.cpp" />
     <ClCompile Include="RAIIDirectory.cpp" />
+    <ClCompile Include="RAIIEvent.cpp" />
     <ClCompile Include="RAIIFile.cpp" />
     <ClCompile Include="RAIIThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\RAIIBuffer.h" />
     <ClInclude Include="include\RAIIDirectory.h" />
+    <ClInclude Include="include\RAIIEvent.h" />
     <ClInclude Include="include\RAIIFile.h" />
     <ClInclude Include="include\RAIIFileMapping.h" />
     <ClInclude Include="include\RAIIThread.h" />

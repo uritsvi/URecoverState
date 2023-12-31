@@ -37,6 +37,10 @@
 
 #define SHARED_MEMORY_REGION_NAME "URSDLL"
 
+#define UNIT_TEST_EXCEPION_CODE 0x6969
+#define UNIT_TEST_CAPTURE 0x420
+#define UNIT_TEST_REVERT 0x69
+
 struct HeapAllocParams {
 	HANDLE HeapHandle;
 	DWORD  dwFlags;
