@@ -11,6 +11,8 @@ DWORD a(LPVOID Ctx) {
 
 	g_Event.Wait();
 
+	std::cout << "hello1\n";
+
 	while(true){}
 
 	return 0;
@@ -20,6 +22,9 @@ DWORD b(LPVOID Ctx) {
 	int a = 10;
 	
 	g_Event.Wait();
+
+	std::cout << "hello2\n";
+
 
 	while(true){}
 
@@ -40,6 +45,7 @@ bool ThreadTests::Run() {
 	bool res = true;
 
 	do {
+		/*
 		res = g_Event.Create();
 		if (!res) {
 			ERROR_LOG("Failed to create event");
@@ -63,23 +69,26 @@ bool ThreadTests::Run() {
 		*/
 		Sleep(500);
 
-		res = RecoverState::GetInstance().Capture();
+		res = RecoverState::GetInstance().Capture("Threads create");
 		if (!res) {
 			ERROR_LOG("Failed to capture state");
 			break;
 		}
 
+		std::cout << "hello\n";
+		/*
 		res = g_Event.Set();
 		if (!res) {
 			ERROR_LOG("Failed to set event");
 		}
+		*/
 		
 		/*
 		* Let the threads continue execution
 		*/
 		Sleep(500);
 
-		res = RecoverState::GetInstance().Recover();
+		res = RecoverState::GetInstance().Recover("Threads recover");
 		if (!res) {
 			ERROR_LOG("Failed to recover state");
 			break;

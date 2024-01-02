@@ -33,9 +33,6 @@
     <ClCompile Include="URSDLL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NTDLL.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MemAllocInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -72,9 +69,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="URSDLL.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NTDLL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MemAllocInfo.h">

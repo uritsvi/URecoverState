@@ -1,5 +1,11 @@
 #pragma once
 
+struct SharedMem {
+	UINT Op;
+	UINT StateStrLen;
+	CHAR StateStr[0];
+};
+
 /*
 * Params: WPARAM = PID 
 */
@@ -37,9 +43,21 @@
 
 #define SHARED_MEMORY_REGION_NAME "URSDLL"
 
-#define UNIT_TEST_EXCEPION_CODE 0x6969
-#define UNIT_TEST_CAPTURE 0x420
-#define UNIT_TEST_REVERT 0x69
+/*
+* A shared address that the tests use to determain 
+* The op type (Capture / Revert).
+* 
+* This address is ignored whene recovering memory state
+* In Debug mode 
+* 
+*/
+#ifdef _DEBUG
+	#define TESTS_SHARED_MEM 0x69690000
+	#define TESTS_OP_FLAG_SIZE_IN_BYTES 4096
+
+	#define TESTS_OP_CAPTURE 0
+	#define TESTS_OP_REVERT 1
+#endif
 
 struct HeapAllocParams {
 	HANDLE HeapHandle;

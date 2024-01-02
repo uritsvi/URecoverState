@@ -1,6 +1,6 @@
 #include "TargetProcess.h"
 #include "Error.h"
-#include "NTDLL.h"
+#include "NTDLL\include\NTDLL.h"
 
 TargetProcess& TargetProcess::GetInstance() {
 	static TargetProcess target = TargetProcess();

@@ -4,8 +4,9 @@
 #include "ProcessState.h"
 
 #include "RAII/include/RAIIDirectory.h"
-#include "NTDLL.h"
+#include "NTDLL\include\NTDLL.h"
 
+#pragma comment(lib, "NTDLL.lib")
 #pragma comment(lib, "RAII.lib")
 
 

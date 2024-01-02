@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include "..\include\URSInterface.h"
 
@@ -17,8 +18,7 @@ std::string ToUpper(std::string Str) {
 	return out;
 }
 
-int main() {
-
+void RunWithoutParameters() {
 	bool res = true;
 	do {
 		std::cout << "Enter pid:\n";
@@ -54,4 +54,14 @@ int main() {
 			std::cout << "Unknown command\n";
 		}
 	}
+}
+
+
+int main(int argc, char* argv[]) {
+	do {		
+		RunWithoutParameters();
+	
+	} while (false);
+
+	return 0;
 }

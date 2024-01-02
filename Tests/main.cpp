@@ -1,11 +1,21 @@
 #include "ThreadTests.h"
 #include "..\Error.h"
+#include "RecoverState.h"
+
+#pragma comment(lib, "RAII.lib")
 
 ThreadTests threadTest;
 
 int main() {
+	bool res = true;
+
 	do {
-		bool res = threadTest.Run();
+		res = RecoverState::GetInstance().Init();
+		if (!res) {
+			ERROR_LOG(("Failed to init recover state"));
+		}
+
+		res = threadTest.Run();
 
 		if (res) {
 			SUCCESS_LOG("Passed all tests successfuly!");

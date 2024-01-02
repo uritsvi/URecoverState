@@ -23,7 +23,7 @@ bool RAIIFile::Create(std::string Path, bool DeleteOnClose) {
 		m_Handle = CreateFileA(
 			Path.c_str(),
 			FILE_ALL_ACCESS,
-			0,
+			FILE_SHARE_READ,
 			nullptr,
 			CREATE_NEW,
 			flags,
