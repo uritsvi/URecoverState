@@ -10,21 +10,13 @@ class MemoryState;
 
 struct AllocationInfo {
 
-	AllocationInfo(
-		ULONG64 AllocBase, 
-		ULONG64 Size, 
-		PMINIDUMP_MEMORY_INFO Info) {
-
+	AllocationInfo(ULONG64 Base, ULONG64 Size) {
 		this->Size = Size;
-		this->AllocBase = AllocBase;
-		this->Info = Info;
+		this->Base = Base;
 	}
 
 	ULONG64 Size;
-
-	ULONG64 AllocBase;
-
-	PMINIDUMP_MEMORY_INFO Info;
+	ULONG64 Base;
 };
 
 typedef std::pair<ULONG64, std::shared_ptr<AllocationInfo>> AllocationPair;

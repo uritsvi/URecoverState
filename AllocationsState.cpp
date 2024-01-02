@@ -1,7 +1,6 @@
 #include "AllocationsState.h"
 #include "MemoryState.h"
 #include "Error.h"
-#include "TargetProcess.h"
 
 #define PAGE_SIZE (1 << 12)
 
@@ -58,8 +57,7 @@ bool AllocationsState::Init(
 
 		auto allocInfo = std::make_shared<AllocationInfo>(
 			allocBase, 
-			allocSize,
-			memInfo
+			allocSize
 		);
 		m_Allocations.insert(AllocationPair(
 			allocBase, 
@@ -78,25 +76,13 @@ bool AllocationsState::GetAllocsInRange(
 	_Out_ bool& SameAlloc,
 	_Out_ std::vector<std::shared_ptr<AllocationInfo>> Allocs) {
 
-
-	/*
-	* GetAllocsInRange: regionBase, size, out allocs
-	* 
-	* end = regionBase + size
-	* 
-	* for entry in allocations
-	*	if end > entry.base && end <= entry.end
-	*		allocs.push(entry)
-	*/
 	auto allocEnd = Base + Size;
 
 	for (auto entry : m_Allocations) {
 		auto base = entry.first;
 		auto end = entry.first + entry.second->Size;
 
-		auto current = entry.second;
-
-		if (allocEnd > base && allocEnd <= (current->AllocBase + current->Size)) {
+		if (Base >= base || allocEnd <= end) {
 			Allocs.push_back(entry.second);
 		}
 	}
@@ -104,7 +90,7 @@ bool AllocationsState::GetAllocsInRange(
 	if (Allocs.size() == 1) {
 		
 		auto alloc = Allocs[0];
-		if (alloc->AllocBase == Base && alloc->Size == Size) {
+		if (alloc->Base == Base && alloc->Size == Size) {
 			SameAlloc = true;
 		}
 
@@ -117,62 +103,7 @@ bool AllocationsState::Revert(_In_ AllocationsState& Current) {
 	bool res = true;
 
 	do {
-		for(auto& region : m_Allocations){
-			auto currentRegion = region.second;
-			bool sameAlloc = false;
 
-			std::vector<std::shared_ptr<AllocationInfo>> allocsInRange;
-
-			res = Current.GetAllocsInRange(
-				currentRegion->AllocBase, 
-				currentRegion->Size, 
-				sameAlloc, 
-				allocsInRange
-			);
-			if (!res) {
-				ERROR_LOG("Failed to get allocs info");
-				break;
-			}
-
-			if (sameAlloc) {
-				DWORD old;
-				res = VirtualProtect(
-					(LPVOID)currentRegion->AllocBase, 
-					currentRegion->Info->RegionSize, 
-					currentRegion->Info->Protect, 
-					&old
-				);
-				if (!res) {
-					ERROR_LOG("Failed to protect current region");
-					break;
-				}
-				continue;
-			}
-			
-			res = VirtualFreeEx(
-				TargetProcess::GetInstance().GetProcess(), 
-				(LPVOID)currentRegion->AllocBase, 
-				0, 
-				MEM_FREE
-			);
-			if (!res) {
-				ERROR_LOG("Failed to free virtual memory");
-				break;
-			}
-			for (auto& oldRegion : allocsInRange) {
-				res = VirtualAllocEx(
-					TargetProcess::GetInstance().GetProcess(), 
-					(LPVOID)oldRegion->AllocBase, 
-					oldRegion->Size, 
-					oldRegion->Info->State | MEM_RESERVE, 
-					oldRegion->Info->Protect
-				);
-				if (!res) {
-					ERROR_LOG("Failed to allocate virtual memory");
-					break;
-				}
-			}
-		}
 	} while (false);
 
 	return res;
