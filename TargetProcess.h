@@ -5,6 +5,7 @@
 
 #include <list>
 #include <string>
+#include <memory>
 
 class TargetProcess
 {
@@ -13,7 +14,7 @@ public:
 
 	bool Init(_In_ DWORD Pid);
 	
-	HANDLE GetProcess();
+	std::shared_ptr<RAIIProcess> GetProcess();
 	DWORD GetProcessId();
 
 	//bool GetTargetThreadsList(_Out_ std::list<THREADENTRY32>& Threads);
@@ -29,7 +30,7 @@ public:
 
 
 private:
-	HANDLE m_Process;
+	std::shared_ptr<RAIIProcess> m_Process;
 	DWORD m_Pid;
 };
 
