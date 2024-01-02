@@ -151,7 +151,6 @@
     <ClCompile Include="MemoryState.cpp" />
     <ClCompile Include="ProcessState.cpp" />
     <ClCompile Include="Snapshot.cpp" />
-    <ClCompile Include="TargetProcess.cpp" />
     <ClCompile Include="ThreadsState.cpp" />
     <ClCompile Include="URS.cpp" />
     <ClCompile Include="URSDLL.cpp" />
@@ -166,7 +165,6 @@
     <ClInclude Include="MemoryState.h" />
     <ClInclude Include="ProcessState.h" />
     <ClInclude Include="Snapshot.h" />
-    <ClInclude Include="TargetProcess.h" />
     <ClInclude Include="ThreadsState.h" />
     <ClInclude Include="URS.h" />
     <ClInclude Include="URSDLL.h" />
