@@ -1,6 +1,7 @@
 #include "TargetProcess.h"
 #include "Error.h"
 #include "NTDLL\include\NTDLL.h"
+#include "RAII/include/RAIIProcess.h"
 
 TargetProcess& TargetProcess::GetInstance() {
 	static TargetProcess target = TargetProcess();
@@ -28,7 +29,7 @@ bool TargetProcess::Init(_In_ DWORD Pid) {
 
 	return res;
 }
-HANDLE TargetProcess::GetProcess() {
+std::shared_ptr<RAIIProcess> TargetProcess::GetProcess() {
 	return m_Process;
 }
 
@@ -98,6 +99,8 @@ bool TargetProcess::FreeAllProcessPages() {
 	return res;
 }
 */
+
+/*
 bool TargetProcess::LoadDllToTargetProcess(
 	_In_ std::string DllPath,
 	_Out_ DWORD& Tid) {
@@ -204,3 +207,4 @@ bool TargetProcess::Resume() {
 
 	return res;
 }
+*/
