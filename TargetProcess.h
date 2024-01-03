@@ -7,6 +7,8 @@
 #include <string>
 #include <memory>
 
+#include "RAII/include/RAIIProcess.h"
+
 class TargetProcess
 {
 public:
@@ -14,7 +16,10 @@ public:
 
 	bool Init(_In_ DWORD Pid);
 	
+
 	std::shared_ptr<RAIIProcess> GetProcess();
+	
+	/*
 	DWORD GetProcessId();
 
 	//bool GetTargetThreadsList(_Out_ std::list<THREADENTRY32>& Threads);
@@ -27,7 +32,7 @@ public:
 
 	bool Suspend();
 	bool Resume();
-
+	*/
 
 private:
 	std::shared_ptr<RAIIProcess> m_Process;

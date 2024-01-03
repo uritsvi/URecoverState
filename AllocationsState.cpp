@@ -149,19 +149,14 @@ bool AllocationsState::Revert(_In_ AllocationsState& Current) {
 				continue;
 			}
 			
-			res = VirtualFreeEx(
-				TargetProcess::GetInstance().GetProcess(), 
-				(LPVOID)currentRegion->AllocBase, 
-				0, 
-				MEM_FREE
-			);
+			auto process = TargetProcess::GetInstance().GetProcess();
+			res = process->FreeMem((LPVOID)currentRegion->AllocBase);
 			if (!res) {
 				ERROR_LOG("Failed to free virtual memory");
 				break;
 			}
 			for (auto& oldRegion : allocsInRange) {
-				res = VirtualAllocEx(
-					TargetProcess::GetInstance().GetProcess(), 
+				res = process->AllocMem(
 					(LPVOID)oldRegion->AllocBase, 
 					oldRegion->Size, 
 					oldRegion->Info->State | MEM_RESERVE, 

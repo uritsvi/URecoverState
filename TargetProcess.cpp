@@ -15,14 +15,11 @@ bool TargetProcess::Init(_In_ DWORD Pid) {
 	do {
 		m_Pid = Pid;
 
-		m_Process = OpenProcess(
-			PROCESS_ALL_ACCESS, 
-			FALSE, 
+		res = m_Process->Open(
 			Pid
 		);
-		if (m_Process == nullptr) {
+		if (!res) {
 			ERROR_LOG("Failed to open process");
-			res = false;
 			break;
 		}
 	} while (false);
@@ -33,9 +30,6 @@ std::shared_ptr<RAIIProcess> TargetProcess::GetProcess() {
 	return m_Process;
 }
 
-DWORD TargetProcess::GetProcessId() {
-	return m_Pid;
-}
 
 /*
 bool TargetProcess::GetTargetThreadsList(_Out_ std::list<THREADENTRY32>& Threads) {

@@ -28,7 +28,8 @@ bool URSDLL::Load() {
 
 
 
-		res = TargetProcess::GetInstance().Suspend();
+		auto process = TargetProcess::GetInstance().GetProcess();
+		res = process->Suspend();
 		if (!res) {
 			ERROR_LOG("Failed to suspend process");
 			break;
@@ -46,7 +47,7 @@ bool URSDLL::Load() {
 			break;
 		}
 
-		res = TargetProcess::GetInstance().LoadDllToTargetProcess(
+		res = process->LoadDllToTargetProcess(
 			path, 
 			m_RemoteThreadTid
 		);
@@ -61,7 +62,7 @@ bool URSDLL::Load() {
 			break;
 		}
 
-		res = TargetProcess::GetInstance().Resume();
+		res = process->Resume();
 		if (!res) {
 			ERROR_LOG("Failed to resume target process");
 			break;

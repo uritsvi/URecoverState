@@ -274,7 +274,7 @@ bool ProcessState::ExitAccessProcessState() {
 
 
 	do {
-		res = TargetProcess::GetInstance().Resume();
+		res = TargetProcess::GetInstance().GetProcess()->Resume();
 		if (!res) {
 			ERROR_LOG("Failed to resume target process");
 			break;
@@ -290,7 +290,7 @@ bool ProcessState::EnterAccessProcessState() {
 	do {
 
 
-		res = TargetProcess::GetInstance().Suspend();
+		res = TargetProcess::GetInstance().GetProcess()->Suspend();
 		if (!res) {
 			ERROR_LOG("Failed to suspend target process");
 			break;

@@ -38,10 +38,10 @@ bool DmpFile::Dump(_In_ std::shared_ptr<RAIIDirectory> TargetDirectory) {
 		auto targetProcess =
 			TargetProcess::GetInstance().GetProcess();
 		auto targetId =
-			TargetProcess::GetInstance().GetProcessId();
+			targetProcess->GetPID();
 
 		res = MiniDumpWriteDump(
-			targetProcess,
+			targetProcess->GetHandle(),
 			targetId,
 			m_File.GetHandle(),
 			MINI_DUMP_FLAGS,
