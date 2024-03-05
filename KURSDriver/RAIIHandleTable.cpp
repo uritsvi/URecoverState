@@ -35,7 +35,7 @@ NTSTATUS RAIIHandleTable::MoveAndDeleteEntry(
 
 	NTSTATUS status = STATUS_SUCCESS;
 	RAIIThread thread;
-
+	KdPrint(("helloopoooooooo\n"));
 
 	do {
 		KernelFunctions exports;

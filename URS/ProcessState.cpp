@@ -9,6 +9,7 @@
 #include "..\Common\include\Error.h"
 
 #include "..\NTDLL\include\NTDLL.h"
+#include "..\URSDriver\include\URSDriverInterface.h"
 
 #define PSS_CAPTURE_FLAG (PSS_CAPTURE_HANDLES | \
 						  PSS_CAPTURE_HANDLE_NAME_INFORMATION | \
@@ -209,15 +210,17 @@ bool ProcessState::RecoverState() {
 			for (auto recoverStage : m_RecoverStages) {
 
 				bool continueSearch;
-				std::shared_ptr<RAIIHandle> raiiHandle;
+				std::shared_ptr<RAIIHandle> outRaiiHandle;
 
 				continueSearch = true;
-				auto handleInfo = snapshotData.HandleEntries->find(handle.HandleVal)->second;
+				auto handleInfo = 
+					snapshotData.HandleEntries->find(handle.HandleVal)->second;
+				
 				handle.HandleEntry = handleInfo;
 				res = recoverStage->MakeHandle(
 					handle, 
 					continueSearch, 
-					raiiHandle
+					outRaiiHandle
 				);
 				if (!res) {
 					auto handleEntry = 
@@ -229,9 +232,34 @@ bool ProcessState::RecoverState() {
 					);
 				}
 
-				if (!continueSearch) {
+				if (continueSearch) {
+					continue;
+				}
+
+				auto targetProcess = 
+					TargetProcess::GetInstance().GetProcess();
+				
+				HANDLE handleInTarget = nullptr;
+				res = outRaiiHandle->DupHandle(
+					targetProcess,
+					handleInTarget
+				);
+				if (!res) {
+					ERROR_LOG("Failed to duplicate handle");
 					break;
 				}
+
+				res = URSDriverChangeHandle(
+					handleInTarget, 
+					handle.HandleVal, 
+					targetProcess->GetPID()
+				);
+				if (!res) {
+					ERROR_LOG("Failed to move handle index in target process");
+					break;
+				}
+
+				
 			}
 		}
 

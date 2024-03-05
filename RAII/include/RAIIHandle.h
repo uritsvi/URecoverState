@@ -17,7 +17,6 @@ public:
 
 	HANDLE GetHandle();
 	bool DupHandle(
-		_In_ std::shared_ptr<RAIIProcess> Src, 
 		_In_ std::shared_ptr<RAIIProcess> Target,
 		_Out_ HANDLE& Out
 	);

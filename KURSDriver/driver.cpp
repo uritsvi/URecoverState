@@ -170,7 +170,8 @@ NTSTATUS Control(
 					break;
 				}
 
-				KdPrint(("Change handle success"));
+				KdPrint(("Wtffffffffff\n"));
+				KdPrint(("Change handle success "));
 			}break;
 
 			case IOCTL_CHANGE_PROCESS_ID: {

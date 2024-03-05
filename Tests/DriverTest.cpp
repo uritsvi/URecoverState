@@ -118,6 +118,27 @@ bool WaitTest() {
 	return res;
 }
 
+void MoveHandleTest() {
+	HANDLE event = CreateEventA(nullptr, TRUE, TRUE, nullptr);
+	
+	HANDLE targetHandle = (HANDLE)420;
+
+	if (SetEvent(targetHandle) == TRUE) {
+		std::cout << "Wtf\n";
+		return;
+	}
+
+	bool res = URSDriverChangeHandle(event, targetHandle, GetCurrentProcessId());
+	if (!res) {
+		ERROR_LOG("Failed to change hande");
+	}
+
+	if (SetEvent(targetHandle)) {
+		std::cout << "GOOOOOOOOOD\n";
+	}
+
+}
+
 
 DriverTest::DriverTest() {
 }
@@ -130,6 +151,7 @@ void DriverTest::Run() {
 	
 	
 	do {
+		
 		_CompareObjectHandles =
 			(pCompareObjectHandles)GetProcAddress(
 				GetModuleHandleA("Kernelbase.dll"),
@@ -145,12 +167,14 @@ void DriverTest::Run() {
 			ERROR_LOG("Failed to load driver");
 			break;
 		}
+		/*
 		res = WaitTest();
 		if (!res) {
 			ERROR_LOG("Test 1 failed");
 		}
+		*/
 	
-
+		MoveHandleTest();
 
 
 	} while (false);

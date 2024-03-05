@@ -65,6 +65,8 @@ void WaitTest() {
 	);
 	Sleep(MINIMUM_TIMEOUT_IN_SC);
 
+	//printf("some log\n");
+
 	CAPTURE("cap");
 
 	event.Set();
@@ -91,13 +93,13 @@ void SleepTest() {
 
 		CAPTURE("cap");
 
-		RAIIThread newThread;
-		newThread.Open(tid);
+		//RAIIThread newThread;
+		//newThread.Open(tid);
 
 		DWORD exitCode;
 		auto seconds = DEFAULT_TIME_OUT_IN_MS;
 
-		res = newThread.WaitForTerminate(
+		res = thread.WaitForTerminate(
 			exitCode,
 			seconds / 1000
 		);
@@ -116,6 +118,8 @@ void SleepTest() {
 		printf("error in sleep test\n");
 		exit(-1);
 	}
+
+	printf("passed sleep test\n");
 }
 void InitThreadTest() {
 	bool res = true;
@@ -143,6 +147,8 @@ void InitThreadTest() {
 		printf("error in Test 2\n");
 		exit(-1);
 	}
+
+	printf("passed init thread test\n");
 }
 
 void ExitThreadTest() {
@@ -154,7 +160,7 @@ void ThreadTests::Run() {
 	SleepTest();
 	//WaitTest();
 	//InitThreadTest();
-	//ExitThreadTest();
+	ExitThreadTest();
 	// Suspend test 
 	// apc's test
 	// thread msg test 
@@ -164,5 +170,6 @@ void ThreadTests::Run() {
 	// send and get message
 	// read write files op's 
 
+	printf("passed all tests\n");
 
 }

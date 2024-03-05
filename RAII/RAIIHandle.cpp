@@ -16,12 +16,11 @@ HANDLE RAIIHandle::GetHandle() {
 	return m_Handle;
 }
 bool RAIIHandle::DupHandle(
-	_In_ std::shared_ptr<RAIIProcess> Src,
 	_In_ std::shared_ptr<RAIIProcess> Target, 
 	_Out_ HANDLE& Out) {
 
 	return DuplicateHandle(
-		Src->GetRAIIHandle()->GetHandle(), 
+		GetCurrentProcess(),
 		m_Handle, 
 		Target->GetRAIIHandle()->GetHandle(), 
 		&Out, 
