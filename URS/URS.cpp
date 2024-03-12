@@ -16,9 +16,21 @@
 #pragma comment(lib, "NTDLL.lib")
 #pragma comment(lib, "RAII.lib")
 
+
 bool URS::Init(
-	_In_ DWORD PID, 
+	_In_ DWORD PID,
 	_In_ DebuggerFunctions Functions) {
+
+	m_PID = PID;
+	m_Functions = Functions;
+
+	m_ProcessState.RegisterRecoverStage(std::make_shared<ThreadsRecoverStage>());
+
+
+	return true;
+}
+
+bool URS::PostProcessInit() {
 
 	bool res = true;
 	
@@ -29,7 +41,7 @@ bool URS::Init(
 			break;
 		}
 
-		res = TargetProcess::GetInstance().Init(PID);
+		res = TargetProcess::GetInstance().Init(m_PID);
 		if (!res) {
 			ERROR_LOG("Failed to init target process");
 			break;
@@ -47,9 +59,7 @@ bool URS::Init(
 			break;
 		}
 
-		m_Functions = Functions;
 		
-		m_ProcessState.RegisterRecoverStage(std::make_shared<ThreadsRecoverStage>());
 
 	} while (false);
 
@@ -143,7 +153,10 @@ bool URS::CaptureState() {
 		}
 
 		/*
-		* Can return false 
+		* Can 
+
+
+
 		*/
 		RecoverMappedMemPages(m_CloneOfProcess);
 

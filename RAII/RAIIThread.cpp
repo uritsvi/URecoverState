@@ -154,7 +154,8 @@ bool RAIIThread::SetContext(_In_ PCONTEXT Context) {
 
 bool RAIIThread::Suspend() {
 	if (m_Handle == nullptr) {
-		return false;
+		
+		;
 	}
 
 	DWORD res = SuspendThread(m_Handle->GetHandle());

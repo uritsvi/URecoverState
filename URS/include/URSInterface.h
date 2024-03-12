@@ -9,6 +9,10 @@ bool InitURS(
 	_In_ DebuggerFunctions Functions
 );
 
+
+bool URSPreProcessInit();
+bool URSPostProcessInit();
+
 bool URSCaptureState();
 bool URSRecoverState();
 bool URSCompareSnapshots(_Out_ bool& Equals);

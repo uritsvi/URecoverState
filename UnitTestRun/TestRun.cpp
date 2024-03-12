@@ -426,7 +426,9 @@ namespace TestRun {
 					res = SetBpOnMain(mainFuncAddr);
 					if (!res) {
 						ERROR_LOG("Failed to set bp on main");
-						return false;
+						
+						
+						;
 					}
 
 					firstBp = false;

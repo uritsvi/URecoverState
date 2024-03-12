@@ -202,7 +202,8 @@ bool RAIIProcess::Suspend() {
 	HANDLE hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
 
 	if (hThreadSnap == INVALID_HANDLE_VALUE) {
-		return false;
+		
+		;
 	}
 
 	THREADENTRY32 te32;

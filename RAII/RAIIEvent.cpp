@@ -29,7 +29,12 @@ bool RAIIEvent::Create(bool ManualReset) {
 
 bool RAIIEvent::Set() {
 	if (m_Handle == nullptr) {
-		return false;
+		
+		
+		
+		
+		
+		;
 	}
 
 	return SetEvent(m_Handle);

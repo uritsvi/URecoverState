@@ -15,9 +15,13 @@
 class URS
 {
 public:
+
 	bool Init(
 		_In_ DWORD PID,
-		_In_ DebuggerFunctions Functions);
+		_In_ DebuggerFunctions Functions
+	);
+	bool PreProcessInit();
+	bool PostProcessInit();
 
 
 	bool CaptureState();
@@ -29,10 +33,13 @@ private:
 
 private:
 	DebuggerFunctions m_Functions;
+	DWORD m_PID;
+	
 	std::shared_ptr<RAIIProcess> m_CloneOfProcess;
 
 	URSDLL m_URSDLL;
 
 	ProcessState m_ProcessState;
+
 };
 

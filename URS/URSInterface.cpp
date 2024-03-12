@@ -9,9 +9,16 @@ bool InitURS(
 	_In_ DebuggerFunctions Functions) {
 
 	return g_URS.Init(
-		PID,
+		PID, 
 		Functions
 	);
+}
+
+bool URSPreProcessInit() {
+	return true;
+}
+bool URSPostProcessInit() {
+	return g_URS.PostProcessInit();
 }
 
 bool URSCaptureState() {
