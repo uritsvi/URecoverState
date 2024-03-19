@@ -1,5 +1,7 @@
 # URecoverState
 
+<h2>Currently discontinued beacause of a problem in the handle recovery process</h2>
+
 A program that captures the state of a process and let you revert back to it
 
 <h1>Open source projects i used (and modified to my need are)</h1>
