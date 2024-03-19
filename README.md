@@ -1,6 +1,6 @@
 # URecoverState
 
-<h2>Currently discontinued beacause of a problem in the handle recovery process</h2>
+(Currently discontinued beacause of a problem in the handle recovery process)
 
 A program that captures the state of a process and let you revert back to it
 
